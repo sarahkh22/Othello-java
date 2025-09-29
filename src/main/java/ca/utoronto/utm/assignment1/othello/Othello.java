@@ -27,7 +27,7 @@ public class Othello {
 	 * @return P1, P2 or EMPTY
 	 */
 	public char getWhosTurn() {
-		return ' ';
+        return whosTurn;
 	}
 
 	/**
@@ -40,7 +40,9 @@ public class Othello {
 	 * @return whether the move was successfully made.
 	 */
 	public boolean move(int row, int col) {
-		return true;
+        numMoves = numMoves + 1;
+        whosTurn = OthelloBoard.otherPlayer(whosTurn);
+        return true;
 	}
 
 	/**
@@ -51,7 +53,6 @@ public class Othello {
 	public int getCount(char player) {
 		return 0;
 	}
-
 	/**
 	 * Returns the winner of the game.
 	 * 
