@@ -106,11 +106,15 @@ public class OthelloBoard {
         r = row + drow;
         c = col + dcol;
 
-        if (validCoordinate(row, col) == false){
-            return EMPTY;}
+        if (validCoordinate(r, c) == false){
+            return EMPTY;
+        }
+        if (board[r][c] == EMPTY){
+            return EMPTY;
+        }
 
-        char first = board[r][c];
-        char second = otherPlayer(first);
+        char opponent = board[r][c];
+        char player = otherPlayer(opponent);
         boolean found = false;
 
         while (validCoordinate(r, c)){
@@ -121,16 +125,16 @@ public class OthelloBoard {
                 return EMPTY;
             }
 
-            if (curr == first){
+            if (curr == player){
                 if (found){
-                    return first;
+                    return player;
                 }
                 else{
                     return EMPTY;
                 }
             }
 
-            if (curr == second) {
+            if (curr == opponent) {
                 found = true;
             }
             r = r + drow;
@@ -156,12 +160,24 @@ public class OthelloBoard {
 	 *         board is reached before seeing a player token.
 	 */
 	private int flip(int row, int col, int drow, int dcol, char player) {
+        if (validCoordinate(row, col) == false){
+            return -1;
+        }
+
+        if (board[row][col] != EMPTY){
+            return -1;
+        }
+
+        if (alternation(row, col, drow, dcol) != player){
+            return -1;
+        }
+
         int r = row + drow;
         int c = col + dcol;
         int count = 0;
 
         if (validCoordinate(r, c) == false){
-        return -1;
+            return -1;
         }
 
         if (board[r][c] == EMPTY){
@@ -171,31 +187,13 @@ public class OthelloBoard {
         if (board[r][c] == player){
             return -1;
         }
-        while (validCoordinate(r, c) && board[r][c] != player){
+        while (validCoordinate(r, c) && board[r][c] == otherPlayer(player)){
+            board[r][c] = player;
             r = r + drow;
             c = c + dcol;
             count = count + 1;
         }
 
-        if (validCoordinate(r, c) == false){
-            return -1;
-        }
-
-        if (board[r][c] == EMPTY){
-            return -1;
-        }
-
-        int reverser;
-        int reversec;
-        reverser = row + drow;
-        reversec = col + dcol;
-        while (reverser != r || reversec != c){
-            board[reverser][reversec] = player;
-            reverser = reverser + drow;
-            reversec = reversec + dcol;
-            count = count + 1;
-
-        }
         return count;
 	}
 
@@ -232,7 +230,7 @@ public class OthelloBoard {
                     for (int drow = -1; drow <= 1; drow = drow + 1){
                         for (int dcol = -1; dcol <= 1; dcol = dcol + 1){
                             if (drow != 0 || dcol != 0) {
-                                char m = hasMove(row, col, drow, dcol);
+                                char m = alternation(row, col, drow, dcol);
                                 if (m == P1){
                                     player1 = true;
                                 }
@@ -268,14 +266,33 @@ public class OthelloBoard {
 	 * @return true if player moved successfully at (row,col), false otherwise
 	 */
 	public boolean move(int row, int col, char player) {
-		if (validCoordinate(row, col)){
+		boolean changed = false;
+        if (validCoordinate(row, col) == false){
             return false;
         }
 
-        // HINT: Use some of the above helper methods to get this methods
-		// job done!!
+        if (board[row][col] != EMPTY){
+        return false;
+    }
 
-		return true;
+        for (int drow = -1; drow <= 1; drow = drow + 1) {
+            for (int dcol = -1; dcol <= 1; dcol = dcol + 1) {
+                if (drow != 0 || dcol != 0) {
+                    if (alternation(row, col, drow, dcol) == player) {
+                        flip(row, col, drow, dcol, player);
+                        changed = true;
+                    }
+                }
+            }
+        }
+        if (changed == true){
+            board[row][col] = player;
+            return true;
+        }
+        // HINT: Use some of the above helper methods to get this methods
+		// job done!
+
+		return false;
 	}
 
 	/**
