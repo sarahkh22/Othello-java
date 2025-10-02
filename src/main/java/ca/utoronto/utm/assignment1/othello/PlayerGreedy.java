@@ -22,7 +22,59 @@ package ca.utoronto.utm.assignment1.othello;
  */
 
 public class PlayerGreedy {
-	public Move getMove() {
-		return null;
-	}
+
+    private char player;
+    private Othello othello;
+
+    public PlayerGreedy(Othello othello, char player) {
+        this.player = player;
+        this.othello = othello;
+    }
+
+    public Move getMove() {
+        int amount = -1;
+        Move best = null;
+
+        for (int row = 0; row < othello.board.getDimension(); row = row + 1) {
+            for (int col = 0; col < othello.board.getDimension(); col = col + 1) {
+                if (othello.board.get(row, col) == OthelloBoard.EMPTY) {
+                    int flipamount = 0;
+                    boolean valid = false;
+                    for (int drow = -1; drow <= 1; drow = drow + 1) {
+                        for (int dcol = -1; dcol <= 1; dcol = dcol + 1) {
+                            if (drow != 0 || dcol != 0) {
+                                int flips = 0;
+                                int r = row + drow;
+                                int c = col + dcol;
+                                char opponent = OthelloBoard.otherPlayer(player);
+
+                                while (othello.board.get(r, c) == opponent && r >= 0 && r < othello.board.getDimension() && c >= 0 && c < othello.board.getDimension()) {
+                                    flips = flips + 1;
+                                    r = r + drow;
+                                    c = c + dcol;
+                                }
+                                if (flips > 0 && r >= 0 && r < othello.board.getDimension() && c >= 0 && c < othello.board.getDimension() && othello.board.get(r, c) == player) {
+                                    flipamount = flipamount + flips;
+                                    valid = true;
+
+                                }
+                            }
+                        }
+                    }
+                    if (valid == true) {
+                        int a = othello.board.getCount(player) + flipamount + 1;
+                        if (a > amount) {
+                            amount = a;
+                            best = new Move(row, col);
+                        } else if (a == amount) {
+                            if (best == null || row < best.getRow() || (row == best.getRow() && col < best.getCol())) {
+                                best = new Move(row, col);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return best;
+    }
 }
