@@ -1,21 +1,48 @@
 RandomVSRandom Report
 
 1) What is your conclusion, does the first or
-second player have some advantage, at least for a random strategy? 
+second player have some advantage, at least for a random strategy?
+
+Based on my observation of OthelloControllerRandomVSRandom, player 1 has some advantages over player 2. The results of
+the 10000 games should be:
+Player 1 = 0.75
+Player 2 = 0.20
+Tie = 1 - 0.20 - 0.75 = 0.05
+In conclusion, the first player almost always has a greater advantage over the other player.
 
 2) Watch https://www.youtube.com/watch?v=Iq9DzN6mvYA
 
 3) Briefly write your thoughts on the above video below:
 
-4) H0 is 
+VanderPlas' talk "Statistics for Hackers", discusses approaching statistics through a computational leans instead of a
+list of formulas. He illustrates that coding can simplify statistics through several examples (coin flip,
+cross-validation, bootstrapping). The takeaway concept is that statistics can reveal many distributions and uncertainties
+in a way that mathematical equations are not able to factor in. He connects statistics to computation by showing that it
+can resolve complex problems while still understanding assumptions like sample size and independence. In my opinion, I
+find this approach very concise and engaging. It allows me to look at statistics in a way of experiments rather than an
+intimidating form of mathematics. Another thing I found very important is always reflecting back on the question in mind,
+this is because when working on a complex problem, one sometimes forgets the overall picture and gets lost. Reflecting
+on the question can keep ones brain focused on the end result. In conclusion, I believe this talk changed my perspective
+on statistics, making me think of it as a flexible and engaging form of learning rather than a strict form.
 
-5) Ha is 
+4) H0 is
+The Null Hypothesis is that no player has a greater advantage and both players have an equal chance of winning.
+
+5) Ha is
+The first player has a greater advantage when playing an Othello RandomVSRandom game.
 
 6) Choose one of the following and delete the other:
-   My experimental results support H0, so they do not support Ha
    My experimental results do not support H0, so they support Ha
 
 7) As in the video, use either math or code (add a Java Class) to argue for or against H0
+
+By analyzing the 10000 games where both players are from PlayerRandom, we can calculate the number of wins for each player
+by counting them. Let p1 be the number of wins for the first player and let p2 be the number of wins for the second
+player. We can then compute the difference using d = p1 - p2. In every case, d is always positive indicating that the
+first player has more wins over the second player. This follows the video by using experiments to obtain a result rather
+than abstract formulas. Counting the outcome allows us to experiment and observe while making the statistical conclusion
+more intuitive.
+
 
 References: 
 https://www.thoughtco.com/null-hypothesis-vs-alternative-hypothesis-3126413
