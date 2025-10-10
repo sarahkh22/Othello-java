@@ -27,7 +27,9 @@ public class OthelloControllerRandomVSGreedy {
 
     public void play() {
 
-        while (!othello.isGameOver()) {
+        int count = 0;
+
+        while (!othello.isGameOver() && count < 10000) {
             Move move = null;
             char whosTurn = othello.getWhosTurn();
 
@@ -39,6 +41,7 @@ public class OthelloControllerRandomVSGreedy {
             if (move != null){
                 othello.move(move.getRow(), move.getCol());
             }
+            count = count + 1;
         }
     }
 

@@ -34,8 +34,9 @@ public class OthelloControllerRandomVSRandom {
     }
 
     public void play() {
+        int count = 0;
 
-        while (!othello.isGameOver()) {
+        while (!othello.isGameOver() && count < 100000) {
             Move move = null;
             char whosTurn = othello.getWhosTurn();
 
@@ -47,6 +48,7 @@ public class OthelloControllerRandomVSRandom {
             if (move != null){
                 othello.move(move.getRow(), move.getCol());
             }
+            count = count + 1;
         }
     }
 
@@ -66,18 +68,22 @@ public class OthelloControllerRandomVSRandom {
         int p1wins = 0, p2wins = 0, numGames = 10000;
 
         for (int i = 0; i < numGames; i = i + 1) {
+
+            System.out.println("starting game " + i); // to stay on track and check
+
             OthelloControllerRandomVSRandom oc = new OthelloControllerRandomVSRandom();
             oc.play();
 
             char winner = oc.getWinner();
+            System.out.println("winner char: " + winner); // to stay on track and check
+
             if (winner == OthelloBoard.P1) {
                 p1wins = p1wins + 1;
             } else if (winner == OthelloBoard.P2) {
                 p2wins = p2wins + 1;
             }
-
-            System.out.println("Probability P1 wins=" + (float) p1wins / numGames);
-            System.out.println("Probability P2 wins=" + (float) p2wins / numGames);
         }
+        System.out.println("Probability P1 wins=" + (float) p1wins / numGames);
+        System.out.println("Probability P2 wins=" + (float) p2wins / numGames);
     }
 }

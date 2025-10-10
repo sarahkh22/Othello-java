@@ -95,7 +95,7 @@ public class OthelloBoard {
 	 *         alternation
 	 */
 	private char alternation(int row, int col, int drow, int dcol) {
-		if (validCoordinate(row, col) == false){
+        if (validCoordinate(row, col) == false){
             return EMPTY;}
 
         if (board[row][col] != EMPTY){
@@ -106,42 +106,23 @@ public class OthelloBoard {
         r = row + drow;
         c = col + dcol;
 
-        if (validCoordinate(r, c) == false){
-            return EMPTY;
-        }
-        if (board[r][c] == EMPTY){
+        if (validCoordinate(r, c) == false || board[r][c] == EMPTY){
             return EMPTY;
         }
 
         char opponent = board[r][c];
         char player = otherPlayer(opponent);
-        boolean found = false;
 
-        while (validCoordinate(r, c)){
-
-            char curr;
-            curr = board[r][c];
-            if (curr == EMPTY){
-                return EMPTY;
-            }
-
-            if (curr == player){
-                if (found){
-                    return player;
-                }
-                else{
-                    return EMPTY;
-                }
-            }
-
-            if (curr == opponent) {
-                found = true;
-            }
+        while (validCoordinate(r, c) && board[r][c] == opponent){
             r = r + drow;
             c = c + dcol;
         }
 
-            return EMPTY;
+        if (validCoordinate(r, c) == true && board[r][c] == player){
+            return player;
+        }
+
+        return EMPTY;
 	}
 
 	/**
@@ -168,10 +149,6 @@ public class OthelloBoard {
             return -1;
         }
 
-        if (alternation(row, col, drow, dcol) != player){
-            return -1;
-        }
-
         int r = row + drow;
         int c = col + dcol;
         int count = 0;
@@ -188,10 +165,21 @@ public class OthelloBoard {
             return -1;
         }
         while (validCoordinate(r, c) && board[r][c] == otherPlayer(player)){
-            board[r][c] = player;
             r = r + drow;
             c = c + dcol;
             count = count + 1;
+        }
+
+        if (validCoordinate(r, c) == false){
+            return -1;
+        }
+
+        if (board[r][c] != player){
+            return -1;
+        }
+
+        for (int i = 1; i <= count; i = i + 1){
+            board[row + i * drow][col + i * dcol] = player;
         }
 
         return count;
@@ -416,6 +404,75 @@ public class OthelloBoard {
 		System.out.println("who has a move=" + ob.hasMove());
 		System.out.println("Trying to move to (4,4) move=" + ob.move(4, 4, P2));
 		System.out.println(ob.toString());
+
+        OthelloBoard b = new OthelloBoard(8);
+
+        // Fill everything with EMPTY
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                b.board[i][j] = OthelloBoard.EMPTY;
+            }
+        }
+
+        // Set up your custom board:
+        b.board[0][0] = OthelloBoard.P2; b.board[0][1] = OthelloBoard.P2; b.board[0][2] = OthelloBoard.P2; b.board[0][3] = OthelloBoard.P2;
+        b.board[0][4] = OthelloBoard.P2; b.board[0][5] = OthelloBoard.P2; b.board[0][6] = OthelloBoard.P2;
+
+        b.board[1][1] = OthelloBoard.P2; b.board[1][2] = OthelloBoard.P2; b.board[1][3] = OthelloBoard.P2;
+        b.board[1][4] = OthelloBoard.P2; b.board[1][5] = OthelloBoard.P2; b.board[1][6] = OthelloBoard.P2; b.board[1][7] = OthelloBoard.P2;
+
+        b.board[2][2] = OthelloBoard.P2; b.board[2][3] = OthelloBoard.P2; b.board[2][4] = OthelloBoard.P2;
+        b.board[2][5] = OthelloBoard.P2; b.board[2][6] = OthelloBoard.P2; b.board[2][7] = OthelloBoard.P1;
+
+        b.board[3][3] = OthelloBoard.P2; b.board[3][4] = OthelloBoard.P2; b.board[3][5] = OthelloBoard.P2;
+        b.board[3][6] = OthelloBoard.P2; b.board[3][7] = OthelloBoard.P1;
+
+        b.board[4][4] = OthelloBoard.P1; b.board[4][5] = OthelloBoard.P2; b.board[4][6] = OthelloBoard.P2; b.board[4][7] = OthelloBoard.P1;
+
+        b.board[5][5] = OthelloBoard.P2; b.board[5][6] = OthelloBoard.P2; b.board[5][7] = OthelloBoard.P1;
+
+        b.board[6][6] = OthelloBoard.P2; b.board[6][7] = OthelloBoard.P1;
+
+        b.board[7][7] = OthelloBoard.P1;
+        System.out.println("Testing flip method: before");
+        System.out.println(b);
+
+        System.out.println("Testing alternation:");
+        System.out.println("alternation(0,0,0,1)=" + b.alternation(0,0,0,1));
+        System.out.println("alternation(1,1,0,1)=" + b.alternation(1,1,0,1));
+        System.out.println("alternation(2,2,0,1)=" + b.alternation(2,2,0,1));
+        System.out.println("alternation(3,3,0,1)=" + b.alternation(3,3,0,1));
+        System.out.println("alternation(4,4,0,1)=" + b.alternation(4,4,0,1));
+        System.out.println("alternation(5,5,0,1)=" + b.alternation(5,5,0,1));
+        System.out.println("alternation(6,6,0,1)=" + b.alternation(6,6,0,1));
+        System.out.println("alternation(7,7,0,1)=" + b.alternation(7,7,0,1));
+        System.out.println("alternation(0,-1,0,1)=" + b.alternation(0,-1,0,1));
+        System.out.println("alternation(1,0,0,1)=" + b.alternation(1,0,0,1));
+        System.out.println("alternation(2,1,0,1)=" + b.alternation(2,1,0,1));
+        System.out.println("alternation(3,2,0,1)=" + b.alternation(3,2,0,1));
+        System.out.println("alternation(4,3,0,1)=" + b.alternation(4,3,0,1));
+        System.out.println("alternation(5,4,0,1)=" + b.alternation(5,4,0,1));
+        System.out.println("alternation(6,5,0,1)=" + b.alternation(6,5,0,1));
+        System.out.println("alternation(7,6,0,1)=" + b.alternation(7,6,0,1));
+
+        System.out.println();
+        System.out.println("Testing hasMove:");
+        System.out.println("hasMove(0,0,0,1)=" + b.hasMove(0,0,0,1));
+        System.out.println("hasMove(1,1,0,1)=" + b.hasMove(1,1,0,1));
+        System.out.println("hasMove(2,2,0,1)=" + b.hasMove(2,2,0,1));
+        System.out.println("hasMove(3,3,0,1)=" + b.hasMove(3,3,0,1));
+        System.out.println("hasMove(4,4,0,1)=" + b.hasMove(4,4,0,1));
+        System.out.println("hasMove(5,5,0,1)=" + b.hasMove(5,5,0,1));
+        System.out.println("hasMove(6,6,0,1)=" + b.hasMove(6,6,0,1));
+        System.out.println("hasMove(7,7,0,1)=" + b.hasMove(7,7,0,1));
+        System.out.println("hasMove(0,-1,0,1)=" + b.hasMove(0,-1,0,1));
+        System.out.println("hasMove(1,0,0,1)=" + b.hasMove(1,0,0,1));
+        System.out.println("hasMove(2,1,0,1)=" + b.hasMove(2,1,0,1));
+        System.out.println("hasMove(3,2,0,1)=" + b.hasMove(3,2,0,1));
+        System.out.println("hasMove(4,3,0,1)=" + b.hasMove(4,3,0,1));
+        System.out.println("hasMove(5,4,0,1)=" + b.hasMove(5,4,0,1));
+        System.out.println("hasMove(6,5,0,1)=" + b.hasMove(6,5,0,1));
+        System.out.println("hasMove(7,6,0,1)=" + b.hasMove(7,6,0,1));
 
 	}
 }

@@ -3,8 +3,8 @@ RandomVSRandom Report
 1) What is your conclusion, does the first or
 second player have some advantage, at least for a random strategy?
 
-Based on my observation of OthelloControllerRandomVSRandom, player 1 has some advantages over player 2. The results of
-the 10000 games should be:
+Based on my observation of OthelloControllerRandomVSRandom, player 1 has some advantages over player 2. The expected
+results of the 10000 games should be:
 Player 1 = 0.75
 Player 2 = 0.20
 Tie = 1 - 0.20 - 0.75 = 0.05

@@ -20,7 +20,7 @@ public class Othello {
 	public static final int DIMENSION = 8; // This is an 8x8 game
 	private char whosTurn = OthelloBoard.P1; // P1 moves first!
 	private int numMoves = 0;
-    private OthelloBoard board = new OthelloBoard(DIMENSION);
+    public OthelloBoard board = new OthelloBoard(DIMENSION);
 
 	/**
 	 * return P1,P2 or EMPTY depending on who moves next.
@@ -71,7 +71,7 @@ public class Othello {
             } else if (j > i) {
                 return OthelloBoard.P2;
             }
-            return OthelloBoard.EMPTY;
+            else{return OthelloBoard.EMPTY;}
         }
         return OthelloBoard.EMPTY;
 	}
@@ -81,12 +81,21 @@ public class Othello {
 	 * @return whether the game is over (no player can move next)
 	 */
 	public boolean isGameOver() {
-		char i = board.hasMove();
-        if (i == OthelloBoard.EMPTY){
-            return true;
+        char i = board.hasMove();
+
+        if(i != OthelloBoard.EMPTY){
+            return false;
         }
-        return false;
-	}
+
+        char player1 = whosTurn;
+        char player2 = OthelloBoard.otherPlayer(whosTurn);
+        whosTurn = player2;
+        boolean player2move = (board.hasMove() != OthelloBoard.EMPTY);
+        whosTurn = player1;
+
+
+        return player2move == false;
+    }
 
 	/**
 	 * 
